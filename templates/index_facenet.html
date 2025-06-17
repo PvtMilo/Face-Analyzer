@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Similarity Checker</title>
+</head>
+<body>
+    <h2>Upload Dua Gambar Wajah</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <label>Gambar 1:</label>
+        <input type="file" name="image1" required><br><br>
+        <label>Gambar 2:</label>
+        <input type="file" name="image2" required><br><br>
+        <button type="submit">Bandingkan</button>
+    </form>
+
+    {% if similarity is not none %}
+        <h3>Kemiripan: {{ similarity }}%</h3>
+        <img src="{{ image1 }}" alt="Image 1" width="200">
+        <img src="{{ image2 }}" alt="Image 2" width="200">
+    {% elif error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
