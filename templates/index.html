@@ -1,25 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Face Similarity Checker</title>
+  <meta charset="UTF-8" />
+  <title>Face Similarity Analyzer</title>
+  <style>
+    /* Global Styles */
+    body {
+      background: radial-gradient(circle at center, #0f0f0f, #151c2c);
+      color: #e0e0e0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      text-align: center;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h2 {
+      font-size: 42px;
+      letter-spacing: 2px;
+      margin-bottom: 30px;
+      background: linear-gradient(90deg, #00c3ff, #66ffe0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 40px 60px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin: 20px 0 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #aaa;
+    }
+
+    input[type="file"] {
+      display: block;
+      margin: 0 auto 20px auto;
+      color: #ddd;
+    }
+
+    button {
+      background: linear-gradient(90deg, #00c3ff, #66ffe0);
+      border: none;
+      padding: 15px 40px;
+      font-size: 16px;
+      color: #000;
+      border-radius: 50px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 255, 255, 0.3);
+    }
+
+    h3 {
+      margin-top: 40px;
+      font-size: 28px;
+      background: linear-gradient(90deg, #66ffe0, #00c3ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    img {
+      margin: 30px 20px;
+      border-radius: 15px;
+      border: 4px solid #00c3ff;
+      width: 240px;
+      height: auto;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+    }
+
+    p {
+      color: #ff6b6b;
+      font-weight: bold;
+      margin-top: 30px;
+    }
+
+    #loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 15, 15, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 999;
+      display: none; /* hidden by default */
+    }
+
+    .spinner {
+      border: 6px solid rgba(255, 255, 255, 0.1);
+      border-top: 6px solid #00c3ff;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    .loading-text {
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: #66ffe0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 <body>
-    <h2>Upload Dua Gambar Wajah</h2>
-    <form method="POST" enctype="multipart/form-data">
-        <label>Gambar 1:</label>
-        <input type="file" name="image1" required><br><br>
-        <label>Gambar 2:</label>
-        <input type="file" name="image2" required><br><br>
-        <button type="submit">Bandingkan</button>
-    </form>
+  <h2>Face Similarity Analyzer</h2>
+  <form method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+    <label>Gambar 1:</label>
+    <input type="file" name="image1" required />
 
-    {% if similarity is not none %}
-        <h3>Kemiripan: {{ similarity }}%</h3>
-        <img src="{{ image1 }}" alt="Image 1" width="200">
-        <img src="{{ image2 }}" alt="Image 2" width="200">
-    {% elif error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+    <label>Gambar 2:</label>
+    <input type="file" name="image2" required />
+
+    <button type="submit">Analyze</button>
+  </form>
+
+  {% if similarity is not none %}
+    <h3>Similarity: {{ similarity }}%</h3>
+    <div>
+      <img src="{{ image1 }}" alt="Image 1" />
+      <img src="{{ image2 }}" alt="Image 2" />
+    </div>
+  {% elif error %}
+    <p>{{ error }}</p>
+  {% endif %}
+
+  <!-- Loading Overlay -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <div class="loading-text">Processing...</div>
+  </div>
+
+  <script>
+    function showLoading() {
+      document.getElementById('loading').style.display = 'flex';
+    }
+  </script>
 </body>
 </html>
